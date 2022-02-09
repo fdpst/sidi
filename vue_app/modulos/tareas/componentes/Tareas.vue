@@ -89,8 +89,8 @@
                     </template>
                     <v-date-picker first-day-of-week="1" v-model="filtros2.fecha_inicio" no-title scrollable>
                         <v-spacer></v-spacer>
-                        <v-btn text color="red" @click="menu = false"><strong>Cancelar</strong></v-btn>
-                        <v-btn text color="success" @click="$refs.menu.save(filtros2.fecha_inicio)"><strong>OK</strong></v-btn>
+                        <v-btn text color="red" @click="menu3 = false"><strong>Cancelar</strong></v-btn>
+                        <v-btn text color="success" @click="$refs.menu3.save(filtros2.fecha_inicio)"><strong>OK</strong></v-btn>
                     </v-date-picker>
                 </v-menu>
             </v-col>
@@ -205,8 +205,8 @@
                     id_usuario: localStorage.getItem('user_id'),
                 },
                 filtros2:{
-                    fecha_inicio: null,
-                    fecha_fin: null,
+                    fecha_inicio: "",
+                    fecha_fin: "",
                     usuario: null,
                     proyecto: null
                 },
@@ -259,13 +259,9 @@
         },
         methods: {
             inicializarFechas(){
-                var date = new Date();
-                this.filtros2.fecha_inicio = date.setDate(1);
-                var currentMonth = date.getMonth(); 
-                var nextMonth = ++currentMonth; 
-                var nextMonthFirstDay = new Date(date.getFullYear(), nextMonth, 1); 
-                var oneDay = 1000 * 60 * 60 * 24; 
-                this.filtros2.fecha_fin = new Date(nextMonthFirstDay - oneDay);
+                this.filtros2.fecha_inicio = "";
+                this.filtros2.fecha_fin = "";
+                
             },
             retearCampos(){
                 this.inicializarFechas();

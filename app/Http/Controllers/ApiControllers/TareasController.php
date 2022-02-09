@@ -18,6 +18,11 @@ class TareasController extends Controller
         $tarea = Tareas::updateOrCreate(['id' => $request->id], $request->all());
         
         $tareas = Tareas::where('id_usuario', $request->id_usuario)->where('fecha', $request->fecha)->get();
+        foreach ($tareas as $tarea) {
+            $proyecto = Proyecto::find($tarea->id_proyecto);
+            $tarea->nombre_proyecto = $proyecto->nombre;
+            $tarea->fecha = Carbon::createFromFormat('Y-m-d', $tarea->fecha)->format('d-m-Y');
+         }
         
         return response()->json($tareas, 200);
     }
@@ -47,16 +52,21 @@ class TareasController extends Controller
     }
 
     public function buscarTareas(Request $request){
-        if($request->usuario==null && $request->proyecto==null){
-            $tareas = Tareas::whereBetween('fecha', [$request->fecha_inicio, $request->fecha_fin])->orderBy('fecha', 'ASC')->get();
-        }else if($request->usuario!=null && $request->proyecto==null){
-            $tareas = Tareas::where('id_usuario', $request->usuario)->whereBetween('fecha', [$request->fecha_inicio, $request->fecha_fin])->orderBy('fecha', 'ASC')->get();
-        }else if($request->usuario==null && $request->proyecto!=null){
-            $tareas = Tareas::where('id_proyecto', $request->proyecto)->whereBetween('fecha', [$request->fecha_inicio, $request->fecha_fin])->orderBy('fecha', 'ASC')->get();
-        }else if($request->usuario!=null && $request->proyecto!=null){
-            $tareas = Tareas::where('id_usuario', $request->id_usuario)->where('id_proyecto', $request->proyecto)->whereBetween('fecha', [$request->fecha_inicio, $request->fecha_fin])->orderBy('fecha', 'ASC')->get();
-        }
-        
+        $tareas = Tareas::where(function ($query) use ($request) {
+            if($request->usuario!=null){
+                $query->where('id_usuario', $request->usuario);
+            }
+            if($request->proyecto!=null){
+                $query->where('id_proyecto', $request->proyecto);
+            }
+            if($request->fecha_inicio!=""){
+                $query->where('fecha', '>=', $request->fecha_inicio);
+            }
+            if($request->fecha_fin!=""){
+                $query->where('fecha', '<=', $request->fecha_fin);
+            }
+        })->orderBy('fecha', 'ASC')->get();
+      
         foreach ($tareas as $tarea) {
             $proyecto = Proyecto::find($tarea->id_proyecto);
             $usuario = User::find($tarea->id_usuario);
@@ -64,6 +74,7 @@ class TareasController extends Controller
             $tarea->nombre_usuario = $usuario->nombre;
             $tipo_tarea = TiposTarea::find($tarea->id_tipo_tarea);
             $tarea->tipo_tarea = $tipo_tarea->nombre;
+            $tarea->fecha = Carbon::createFromFormat('Y-m-d', $tarea->fecha)->format('d-m-Y');
          }
         return response()->json($tareas, 200);
     }
