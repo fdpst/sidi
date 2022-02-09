@@ -61,7 +61,6 @@
                     {text: 'Usuario', value: 'nombre',sortable: false},
                     {text: 'Email',value: 'email',sortable: false},
                     {text: 'Perfil',value: 'role',sortable: false},
-                    {text: 'Fecha Alta',value: 'fecha_alta',sortable: false},
                     {text: 'Acciones',value: 'action',sortable: false},
                 ],
                 Usuarios: [],

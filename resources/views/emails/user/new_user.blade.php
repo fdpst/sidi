@@ -8,13 +8,11 @@ Credenciales:
 Usuario: <strong>{{ $user->email }}</strong><br>
 Contraseña: <strong>{{ $password }}</strong>
 
-Importante!
-Recomendamos una vez acceda la primera vez modifique su contraseña por razones de seguridad.
 
 @component('mail::button', ['url' => Request::root()])
     Ingresar
 @endcomponent
 
-Gracias!!!<br>
+¡¡Gracias!!!<br>
  
 @endcomponent

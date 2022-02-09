@@ -6,19 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
-class Tareas extends Model
+class TiposTarea extends Model
 {
     use HasFactory, SoftDeletes; 
 
-    protected $table = 'tareas';
+    protected $table = 'tipos_tarea';
 
     protected $fillable = [
-      'id_proyecto',
-      'descripcion',
-      'tiempo',
-      'fecha',
-      'id_usuario',
-      'id_tipo_tarea'
+      'nombre',
     ];
 
     protected $dates = ['created_at'];

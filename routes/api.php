@@ -60,7 +60,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('get-fichajes-by-user/{id}', 'FicharController@getFichajesByUser');
     /*Rutas Tareas*/
     Route::post('save-tarea', 'TareasController@saveTarea');
+    Route::post('save-tipo-tarea', 'TareasController@saveTipoTarea');
     Route::post('get-tareas', 'TareasController@getTareas');
+    Route::post('get-tipos-tarea', 'TareasController@getTiposTarea');
     Route::post('buscar-tareas', 'TareasController@buscarTareas');
     Route::post('delete-tarea/{tarea_id}', 'TareasController@eliminarTarea');
 

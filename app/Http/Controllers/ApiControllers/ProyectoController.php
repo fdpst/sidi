@@ -22,20 +22,28 @@ use App\Helpers\FileHelper;
 
 class ProyectoController extends Controller
 {
-  public function getAllProyectos(){
+  /*public function getAllProyectos(){
     $proyecto = Proyecto::with('servicio','estado','usuario','presupuesto')->where('estado_id', '=', '2')->orderBy('fecha_alta', 'DESC')->get();
+    return response()->json($proyecto, 200);
+  }*/
+  public function getAllProyectos(){
+    $proyecto = Proyecto::orderBy('created_at', 'DESC')->get();
     return response()->json($proyecto, 200);
   }
 
-  public function getProyectoByid($proyecto_id){
+  /*public function getProyectoByid($proyecto_id){
     $proyecto = Proyecto::with(['servicio', 'usuario', 'estadosProyecto', 'archivos'])->find($proyecto_id);
     return response()->json($proyecto, 200);
+  }*/
+
+  public function getProyectoByid($proyecto_id){
+    $proyecto = Proyecto::find($proyecto_id);
+    return response()->json($proyecto, 200);
   }
+
   public function getProyectosByUserId($userid){
-    $proyecto = Proyecto::with('servicio','estado','usuario','presupuesto')
-                ->where('estado_id', '=', '2')
-                ->where('usuario_id', '=', $userid)
-                ->orderBy('fecha_alta', 'DESC')->get();
+    $proyecto = Proyecto::where('usuario_id', '=', $userid)
+                ->orderBy('created_at', 'DESC')->get();
     return response()->json($proyecto, 200);
   }
   public function deleteProyecto($proyecto_id){
@@ -44,9 +52,16 @@ class ProyectoController extends Controller
     return response()->json($proyecto, 200);
   }
 
+  public function saveProyecto(Request $request){
+    $proyecto = Proyecto::updateOrcreate(['id' => $request->id], [
+      'nombre'          => $request->nombre
+    ]);
 
+    $proyectos = Proyecto::orderBy('created_at', 'DESC')->get();
+    return response()->json($proyectos, 200);
+  }
 
-  public function saveProyecto(ProyectoRequest $request){
+  /*public function saveProyecto(ProyectoRequest $request){
 
     $proyecto = json_decode($request->proyecto, true);
 
@@ -112,106 +127,5 @@ class ProyectoController extends Controller
     $proyecto->load(['servicio', 'usuario', 'estadosProyecto', 'archivos']);
 
     return response()->json(['proyecto' => $proyecto], 200);
-  }
-
-  public function getAllPotenciales(){
-    $potencial = Proyecto::with('servicio','estado','usuario', 'presupuesto')->where('estado_id', '=', '3')->orderBy('fecha_alta', 'DESC')->get();
-    return response()->json($potencial, 200);
-  }
-
-  public function getPotencialByid($potencial_id){
-    $potencial = Proyecto::with(['servicio','usuario', 'archivos'])->find($potencial_id);
-    return response()->json($potencial, 200);
-  }
-
-  public function deletePotencial($potencial_id){
-    $potencial = Proyecto::find($potencial_id);
-    $potencial->delete();
-    return response()->json($potencial, 200);
-  }
-
-  public function savePotencial(Request $request){
-    $potencial =  json_decode($request->potencial, true);
-
-    $usuario = $potencial['usuario'];
-
-    $idUser = $usuario['id'];
-
-    if($idUser == null){
-      $user = new User();
-      $user->user_id       = $usuario['user_id'];
-      $user->nombre        = $usuario['nombre'];
-      $user->nombre_fiscal = $usuario['nombre_fiscal'];
-      $user->cif           = $usuario['cif'];
-      $user->telefono      = $usuario['telefono'];
-      $user->email         = $usuario['email'];
-      $user->direccion     = $usuario['direccion'];
-      $user->codigo_postal = $usuario['codigo_postal'];
-      $user->localidad     = $usuario['localidad'];
-      $user->provincia_id  = $usuario['provincia_id'];
-      $user->fecha_alta    = $usuario['fecha_alta'];
-      $user->observaciones = $usuario['observaciones'];
-      $user->cuenta        = $usuario['cuenta'];
-      $password            = Str::random(10);
-      $user->password      = Hash::make($password);
-      $user->role          = 2;//$usuario['role'];
-      $user->avatar        = $usuario['avatar'];
-      $user->saveOrFail();
-    }else{
-      $user = User::where('id', '=', $idUser)->first();
-      $user->user_id       = $usuario['user_id'];
-      $user->nombre        = $usuario['nombre'];
-      $user->nombre_fiscal = $usuario['nombre_fiscal'];
-      $user->cif           = $usuario['cif'];
-      $user->telefono      = $usuario['telefono'];
-      $user->email         = $usuario['email'];
-      $user->direccion     = $usuario['direccion'];
-      $user->codigo_postal = $usuario['codigo_postal'];
-      $user->localidad     = $usuario['localidad'];
-      $user->provincia_id  = $usuario['provincia_id'];
-      $user->fecha_alta    = $usuario['fecha_alta'];
-      $user->observaciones = $usuario['observaciones'];
-      $user->cuenta        = $usuario['cuenta'];
-      $user->role          = 2;
-      $user->avatar        = $usuario['avatar'];
-      $user->update();
-    }
-
-    $potencial_guardado = Proyecto::updateOrcreate(['id' => $potencial['id']], [
-      'usuario_id'       => $user->id,
-      'servicio_id'      => $potencial['servicio_id'],
-      'fecha_alta'       => $potencial['fecha_alta'],
-      'detalle_servicio' => $potencial['detalle_servicio'],
-      'estado_id'        => $potencial['estado_id'],
-      'pvp'              => $potencial['pvp'],
-      'pvp_gasto'        => $potencial['pvp_gasto'],
-      'detalles_gasto'   => $potencial['detalles_gasto']
-    ]);
-
-    if($request->hasFile('itemsFiles')){
-       $fileHelper = new FileHelper($potencial_guardado);
-       $fileHelper->guardarArchivos($request->itemsFiles, 'potencial');
-    }
-
-    return response()->json(['potencial' => $potencial_guardado, 'user' => $user], 200);
-  }
-
-  public function updateProyectoEstado($proyecto_estado_id) {
-    $estado = EstadoProyecto::find($proyecto_estado_id);
-    $estado->finalizado = !$estado->finalizado;
-    $estado->save();
-    return response()->json('Estado actualizado', 200);
-  }
-
-  public function deleteEstadoProyecto($proyecto_estado_id) {
-    $estado = EstadoProyecto::find($proyecto_estado_id);
-    $estado->delete();
-    return response()->json($estado, 200);
-  }
-
-  public function deleteFile($tipo, $id){
-    $fileHelper = new FileHelper(new Proyecto());
-    $fileHelper->deleteFile($id, $tipo);
-    return response()->json(['status' => 'success'], 200);
-  }
+  }*/
 }

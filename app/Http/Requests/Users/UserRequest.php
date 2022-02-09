@@ -39,17 +39,8 @@ class UserRequest extends FormRequest
     public function messages(){
         return [
             'nombre.required' => 'El campo nombre es requerido',
-            'nombre_fiscal.required' => 'El campo nombre fiscal es requerido',
-            'cif.required' => 'El campo cif es requerido',
-            'cif.max' => 'El campo cif solo puede tener 9 caracteres',
-            'telefono.max' => 'El campo telefono solo puede tener 9 caracteres',
-            'telefono.required' => 'El campo telefono es requerido',
             'email.required' => 'El campo email es requerido',
             'role.required' => 'El campo rol es requerido',
-            'provincia_id.required' => 'El campo provincia es requerido',
-            'localidad.required' => 'El campo localidad es requerido',
-            'localidad.max' => 'El campo localidad solo puede tener 60 caracteres',
-            'codigo_postal.numeric' => 'Codigo postal debe ser numerico',
         ];
     }
 }
