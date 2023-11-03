@@ -26,4 +26,16 @@ class Tareas extends Model
     protected $casts = [
       'created_at' => 'date:d-m-Y'
     ];
+
+    public function empleado(){
+      return $this->belongsTo(User::class, 'id_usuario');
+    }
+
+    public function tipoTarea(){
+      return $this->belongsTo(TiposTarea::class, 'id_tipo_tarea');
+    }
+
+    public function proyecto(){
+      return $this->belongsTo(Proyecto::class, 'id_proyecto');
+    }
 }

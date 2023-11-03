@@ -15,15 +15,18 @@
                     <v-tab-item class="pa-2 my-0">
                         <v-card flat>
                             <v-row dense>
-                                <v-col cols="12" md="4">
+                                <v-col cols="12" md="3">
                                     <v-text-field dense outlined :error-messages="errors.errors['nombre'] ? errors.errors['nombre'][0] : null"
                                         v-model="usuario.nombre" label="Nombre" required>
                                     </v-text-field>
                                 </v-col>
-                                <v-col cols="12" md="4">
+                                <v-col cols="12" md="3">
                                     <v-text-field dense outlined :error-messages="errors.errors['email'] ? errors.errors['email'][0] : null" v-model="usuario.email" label="Email" required></v-text-field>
                                 </v-col>
-                                <v-col cols="12" md="4">
+                                <v-col cols="12" md="3">
+                                    <v-text-field type="password" dense outlined :error-messages="errors.errors['password'] ? errors.errors['password'][0] : null" v-model="usuario.password" label="password" required></v-text-field>
+                                </v-col>
+                                <v-col cols="12" md="3">
                                     <v-select dense outlined :error-messages="errors.errors['role'] ? errors.errors['role'][0] : null" :items="roles"
                                         item-value="id" item-text="role" label="Seleccione un Perfil" v-model="usuario.role">
                                     </v-select>

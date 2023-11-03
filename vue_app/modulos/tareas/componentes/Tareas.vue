@@ -222,8 +222,9 @@
                 headers2: [
                     // {text: 'Id',value: 'id',sortable: false},
                     {text: 'Fecha', value: 'fecha',sortable: false},
-                    {text: 'Tipo Tarea',value: 'tipo_tarea',sortable: true},
-                    {text: 'Empleado',value: 'nombre_usuario',sortable: true},
+                    {text: 'Proyecto',value: 'proyecto.nombre',sortable: true},
+                    {text: 'Tipo Tarea',value: 'tipo_tarea.nombre',sortable: true},
+                    {text: 'Empleado',value: 'empleado.nombre',sortable: true},
                     {text: 'Proyecto',value: 'nombre_proyecto',sortable: true},
                     {text: 'Descripcion', value: 'descripcion',sortable: false},
                     {text: 'Tiempo',value: 'tiempo',sortable: false},

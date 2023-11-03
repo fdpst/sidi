@@ -62,6 +62,7 @@ class UsuarioController extends Controller
     $user_collet = collect(json_decode($request->usuario));
     $validate = Validator::make($user_collet->toArray(), [
         'nombre' => 'required',
+        'password' => 'required',
         'email' => 'required',
         'role' => 'required',
     ]);
@@ -83,14 +84,13 @@ class UsuarioController extends Controller
     
     $user->nombre = $usuario->nombre;
     $user->email = $usuario->email;
-    $password = Str::random(10);
-    $user->password  = Hash::make($password);
+    $user->password  = Hash::make($usuario->password);
     $user->role = $usuario->role;
     $user->saveOrFail();
 
     $email = $user->email;
     //Se envía mail luego de crear el usuario
-    Mail::to($email)->queue(new NewUserMail($user, $password));
+    //Mail::to($email)->queue(new NewUserMail($user, $password));
     return response()->json($user, 200);
   }
 
@@ -109,7 +109,7 @@ class UsuarioController extends Controller
       $email = $usuario->email;
       if (!isset($request->existeDatosEmpres)) {
         return 1;
-        Mail::to($email)->queue(new UpdateUser($user));
+        //Mail::to($email)->queue(new UpdateUser($user));
       }
       return response()->json([ 'status' => 200, 'message' => 'Usuario Actualizado', 'user' => $user ]);
     }else{

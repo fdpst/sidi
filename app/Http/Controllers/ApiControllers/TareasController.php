@@ -36,7 +36,7 @@ class TareasController extends Controller
     }
 
     public function getTareas(Request $request){
-        $tareas = Tareas::where('id_usuario', $request->id_usuario)->where('fecha', $request->fecha)->get();
+        $tareas = Tareas::where('id_usuario', $request->id_usuario)->where('fecha', $request->fecha)->with('empleado', 'tipoTarea', 'proyecto')->get();
         foreach ($tareas as $tarea) {
             $proyecto = Proyecto::find($tarea->id_proyecto);
             $tarea->nombre_proyecto = $proyecto->nombre;
